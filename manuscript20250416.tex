@@ -1,0 +1,205 @@
+\documentclass{elsarticle}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{epstopdf}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{lineno,hyperref}
+\usepackage{url}
+\usepackage{lineno,hyperref}
+%\modulolinenumbers[5]
+
+\pdfstringdefDisableCommands{%
+  \def\log{}%
+  \def\sum{}%
+  \def\rightarrow{}%
+}
+
+\journal{Journal of \LaTeX\ Templates}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%% Elsevier bibliography styles
+%%%%%%%%%%%%%%%%%%%%%%%
+%% To change the style, put a % in front of the second line of the current style and
+%% remove the % from the second line of the style you would like to use.
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Numbered
+%\bibliographystyle{model1-num-names}
+
+%% Numbered without titles
+%\bibliographystyle{model1a-num-names}
+
+%% Harvard
+%\bibliographystyle{model2-names.bst}\biboptions{authoryear}
+
+%% Vancouver numbered
+%\usepackage{numcompress}\bibliographystyle{model3-num-names}
+
+%% Vancouver name/year
+%\usepackage{numcompress}\bibliographystyle{model4-names}\biboptions{authoryear}
+
+%% APA style
+\bibliographystyle{model5-names}\biboptions{authoryear}
+
+%% AMA style
+%\usepackage{numcompress}\bibliographystyle{model6-num-names}
+
+%% `Elsevier LaTeX' style
+%\bibliographystyle{elsarticle-num}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Analysis of the high-frequency volume-price relationship of Bitcoin}
+%\tnoteref{mytitlenote}}
+%\tnotetext[mytitlenote]{Fully documented templates are available in the elsarticle package on \href{http://www.ctan.org/tex-archive/macros/latex/contrib/elsarticle}{CTAN}.}
+
+%% Group authors per affiliation:
+%\author{Elsevier\fnref{myfootnote}}
+%\address{Radarweg 29, Amsterdam}
+%\fntext[myfootnote]{Since 1880.}
+\author[mymainaddress]{Fang Wan}
+
+% or include affiliations in footnotes:
+\author[mymainaddress,mysecondaryaddress]{Chun-Xiao Nie\corref{mycorrespondingauthor}}
+\cortext[mycorrespondingauthor]{Corresponding author}
+\ead{niechunxiao2009@163.com; niechunxiao@zjgsu.edu.cn}
+
+
+%\author[mymainaddress]{Haoxuan Ma\fnref{myfootnote}}
+%\fntext[myfootnote]{18767998418@163.com}
+
+\address[mymainaddress]{School of Statistics and Mathematics, Zhejiang Gongshang University, Hangzhou 310018, China}
+\address[mysecondaryaddress]{Collaborative Innovation Center of Statistical Data Engineering, Technology \& Application, Zhejiang Gongshang University, Hangzhou, 310018, China}
+
+\begin{abstract}
+
+\end{abstract}
+
+\begin{keyword}
+Information flow  \sep Transfer entropy \sep Cryptocurrency market \sep Volume-price relationship
+%\JEL C32 \sep  C58 \sep G14
+\end{keyword}
+
+\end{frontmatter}
+%
+\linenumbers
+
+\section{Introduction}
+Research into the volume-price relationship provides insights into the underlying mechanisms of market efficiency and liquidity formation. By quantifying the extent to which volume influences or predicts price, analysts can develop more robust models for risk management, trading strategies, and regulatory assessments.
+
+\section{Data and Software}
+The primary data source used in this study is the Gemini Exchange dataset available from \texttt{https://www.cryptodatadownload.com/data/gemini/}, which provides minute-level historical data from 2017 through the most recently available period for Bitcoin trading. This dataset includes timestamped open, high, low, close (OHLC) prices, and trading volume calculated in BTC and USD. The high-frequency nature of the data enables fine-grained temporal analysis and makes it particularly suitable for exploring information flow dynamics within short time intervals.
+
+\section{Method}
+\subsection{Transfer entropy{TE}}
+We use transfer entropy (TE) to capture non-linear and directional information flow between volume and price, which is particularly well-suited for analyzing high-frequency minute-level data, such as that used in this study. Formally, TE from $X = \{x_{t}\}$ to $Y = \{y_{t}\}$ is defined as Eq. \ref{eq01} \cite{TE01}.
+\begin{equation} \label{eq01}
+TE_{x \rightarrow y} = \sum p(x_{t+1},x_{t}^{k},y_{t}^{l}) \log \frac{p(x_{t+1} | x_{t}^{k},y_{t}^{l})}{p(x_{t+1} | x_{t}^{k})}
+\end{equation}
+
+
+\begin{equation}\label{eq02}
+x^{'}_{t}=\left\{
+\begin{array}{rcl}
+s_{1}       & & {x_{t} \leq q_{0.1}}\\
+s_{2}       & & {x_{t} \in (q_{0.1},q_{0.5}] }\\
+s_{3}       & & {x_{t} \in (q_{0.5},q_{0.9}] }\\
+s_{4}       & & {x_{t} > q_{0.9}} \\
+\end{array} \right.
+\end{equation}
+
+
+
+\subsection{VAR-based TE analysis}
+We employ VAR to filter out the linear components in the volume-price relationship, then examine whether information flow exists between the residuals to determine if nonlinear characteristics are present in the volume-price relationship. The steps are as follows.
+
+
+\begin{equation}
+\begin{bmatrix}
+r_t^P \\
+r_t^V
+\end{bmatrix}
+=
+c + \sum_{i=1}^{p} A_i
+\begin{bmatrix}
+r_{t-i}^P \\
+r_{t-i}^V
+\end{bmatrix}
++ \varepsilon_t
+\end{equation}
+
+
+\section{Results}
+\subsection{Volume-price relationship of high-frequency data}
+
+%
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.6\textwidth]{adj130}
+%\caption{The figure shows the No.130 information network, where there are no isolated nodes, and the connection density is significantly greater than that of the first network.}
+%\label{fig04}
+%\end{figure}
+
+
+
+\subsection{Analysis of nonlinear volume-price relationships}
+
+
+
+
+\subsection{Trend analysis}
+%
+%\begin{table}
+%\centering
+%% table caption is above the table
+%\caption{The $\overline{d_{C}(j)}$ value of each cryptocurrency}
+%\label{tab01}       % Give a unique label
+%% For LaTeX tables use
+%\begin{tabular}{llllllll}
+%\hline\noalign{\smallskip}
+%Label & symbol  & Label & symbol & Label & symbol & Label & symbol\\
+%\noalign{\smallskip}\hline\noalign{\smallskip}
+%AMP & 0 & ENS & 1.51 & LPT & 0.3 & SHIB & 4.14 \\
+%ANKR & 3.92 & ETH & 12.08 & LRC & 3.02 & SNX & 2.79 \\
+%AXS & 4.64 & FET & 2.38 & LTC & 7.24 & STORJ & 2.05 \\
+%BAT & 2.26 & FIL & 3.37 & MANA & 7.62 & SUSHI & 4.68 \\
+%BCH & 3.69 & FTM & 8.17 & MATIC & 10.55 & UMA & 0.84 \\
+%BTCG & 1.4 & GALA & 2.63 & MKR & 0.65 & UNI & 6.96 \\
+%BTC & 8.5 & GRT & 1.53 & QNT & 0.03 & XTZ &4.75 \\
+%COMP & 2.15 & INJ & 1.59 & REN & 2.76 & YFI &2.42 \\
+%CRV & 5.12 & LDO & 0.55 & RNDR & 0.38 & ZEC &1.12 \\
+%DOGE & 7.21 & LINK & 8.8 & SAND & 4.21 & - & - \\
+%\end{tabular}
+%\begin{flushleft}
+%
+%\end{flushleft}
+%\end{table}
+
+
+
+
+\section{Conclusions}
+
+
+\section*{CRediT authorship contribution statement}
+
+
+\section*{Funding Sources}
+The work is supported by the characteristic \& preponderant discipline of key construction universities in Zhejiang province (Zhejiang Gongshang University $-$ Statistics). Fund Number : 1020JYN6523001G-026; 1020JYN6524001G-020.
+
+\section*{Declaration of Competing Interest}
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper. No conflict of interest have been declared by the authors.
+
+\section*{References}
+
+\bibliography{mybibfile}
+
+
+\section*{Appendix}
+
+\end{document}
