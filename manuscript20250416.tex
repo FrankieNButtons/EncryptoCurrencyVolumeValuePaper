@@ -77,7 +77,7 @@
 \address[mysecondaryaddress]{Collaborative Innovation Center of Statistical Data Engineering, Technology \& Application, Zhejiang Gongshang University, Hangzhou, 310018, China}
 
 \begin{abstract}
-
+In this paper, we present a comprehensive analysis of the high-frequency volume-price relationship of Bitcoin, we designed a systematic analyzing process from quantifying the information flow between price and volume with transfer entropy, filtering the linear conponents with VAR and investigating the trend inside the relationship from both directions and in different conponents. An increasing dominant non-linear information flow observed from volume to price, and a dominant linear infomation flow observed from price to volume, with the non-linear one decreasing by years. These results provide valuable insights into trading volume based price predictability, methodology for risk control and the construction of trading strategy in encryptocurrency market.
 \end{abstract}
 
 \begin{keyword}
@@ -90,10 +90,12 @@ Information flow  \sep Transfer entropy \sep Cryptocurrency market \sep Volume-p
 \linenumbers
 
 \section{Introduction}
-Research into the volume-price relationship provides insights into the underlying mechanisms of market efficiency and liquidity formation. By quantifying the extent to which volume influences or predicts price, analysts can develop more robust models for risk management, trading strategies, and regulatory assessments.
+Research into the volume-price relationship provides insights into the underlying mechanisms of market efficiency and liquidity formation. By quantifying the extent to which volume influences or predicts price, analysts can develop more robust models for risk management, trading strategies, and regulatory assessments. As cryptocurrency becomes increasingly prevalent, Iits high volatility and non-interval trading mechanism making it one of the most profit but risky markets  for investment, with \textbf{Bitcoin} being the highest trading activity and having the largest market share(about 60\% currently) product in the whole market. The past few years has witnessed the rocket growth of Bitcoin in both price and rading volume calculated in USD, making it a fiercely competing and widely participating market. And several researches has been done on Bitcoin and the whole encrypto cryptocurrency market, and reached several useful Conclusions.\\
+From the perspective of the feature and predictability of price or volume themselves, we got passimistic conclusion like nothing can predicte the return of Bitcoin\cite{aalborg2019can}. Besides, evidence of informed trading were found in Bitcoin\cite{feng2018informed}, which may cause volatility in the volume-price relationship of Bitcoin.\\
+Thus in this paper, we designed a systematic process from quantifying the information flow to isolating different conponents, and further examed the trend inside those relationship on the high-frequent data to comprehensively describe the volume-price relationship of the centeral role of encryptocurrency, Bitcoin. and offer valuable insights on the interactivity of Bitcoin's volume \& price, and provides with suggestions on the prediction  of Bitcoin's returns and volatility.
 
 \section{Data and Software}
-The primary data source used in this study is the Gemini Exchange dataset available from \texttt{https://www.cryptodatadownload.com/data/gemini/}, which provides minute-level historical data from 2017 through the most recently available period for Bitcoin trading. This dataset includes timestamped open, high, low, close (OHLC) prices, and trading volume calculated in BTC and USD. The high-frequency nature of the data enables fine-grained temporal analysis and makes it particularly suitable for exploring information flow dynamics within short time intervals. The software implemented in our analysis is R with several well-verified packages mentioned in Section \ref{sec:method}. The general view of our data is shown as below. We consider only days with over 90\% minute-level data available for the analysis, and the valid days for each year are shown in Table \ref{tab01_valid_days}. The summary statistics of the high-frequency close price and trading volume are shown in Table \ref{tab:price_stats} and Table \ref{tab:volume_stats} respectively. The data is then transformed into two log returns, and are denoted as $r^{(P)}$ and $r^{(V)}$ for price and volume respectively.
+The primary data source used in this study is the Gemini Exchange dataset available from \texttt{https://www.cryptodatadownload.com/data/gemini/}, which provides minute-level historical data from 2017 through the most recently available period for Bitcoin trading. This dataset includes timestamped open, high, low, close (OHLC) prices, and trading volume calculated in BTC and USD. The high-frequency nature of the data enables fine-grained temporal analysis and makes it particularly suitable for exploring information flow dynamics within short time intervals. The software implemented in our analysis is R with several well-verified packages mentioned in Section \ref{sec:method}. The general view of our data is shown as below. We consider only days with over 90\% minute-level data available as valid days for our analysis, and the number of them are shown by year in Table \ref{tab01_valid_days}. The summary statistics of the high-frequency close price and trading volume are shown in Table \ref{tab:price_stats} and Table \ref{tab:volume_stats} respectively. The data is then transformed into two log returns, and are denoted as $r^{(P)}$ and $r^{(V)}$ for price and volume respectively.
 
 
 \begin{table}[H]
@@ -158,15 +160,15 @@ The primary data source used in this study is the Gemini Exchange dataset availa
     \hline
   \end{tabular}
 \end{table}
-It is obivious that the price grows rapidly from 2017 to 2025, with the its distribution much level than normal, and slightly positive skewness. From the perspective of volume, the distribution is hight skewed and heavy-tailed, with the mean volume decreasing from 2017 to 2025. This indicates that in this fast, extensive market, the growth of trading scale of Bitcoin is imbalance with the increase of its price, which implies a non-linear relationship can be captured.
+It is obivious that the price grows rapidly from 2017 to 2025, with its distribution muchflatter than normal, and slightly positive skewness. As for volume, the distribution is hight skewed and heavy-tailed, with the mean volume decreasing from 2017 to 2025. This indicates that in this fast, extensive market, the growth of trading scale of Bitcoin is imbalance with the increase of its price, which implies a non-linear relationship can be captured. Thus we inroduced transfer entropy as the main tool to capture this non-linear volume-price relationship, and designed a combination of TE captureer, VAR filter and MK trend examiner to investgate this delicate paradiam.
 
 \section{Method}\label{sec:method}
 \subsection{Transfer entropy({TE}) with Markov Block Bootstrap}
-Transfer entropy is used to capture the non-linear and directional information flow between time series, with that from $X = \{x_{t}\}$ to $Y = \{y_{t}\}$ defined as Eq. \ref{eq01} \cite{TE01}.
+Transfer entropy is used to capture the non-linear and directional information flow between time series\cite{dimpfl2013using}, with that from $X = \{x_{t}\}$ to $Y = \{y_{t}\}$ defined as Eq. \ref{eq01} \cite{TE01}.
 \begin{equation} \label{eq01}
   TE_{y \rightarrow x} = \sum p(x_{t+1}, \mathbf{x}_t^{(k)}, \mathbf{y}_t^{(l)}) \log \frac{p(x_{t+1} \mid \mathbf{x}_t^{(k)}, \mathbf{y}_t^{(l)})}{p(x_{t+1} \mid \mathbf{x}_t^{(k)})}
   \end{equation}
-  where $\mathbf{x}_t^{(k)} = (x_{t-k+1}, \dots, x_t)$ and $\mathbf{y}_t^{(l)} = (y_{t-l+1}, \dots, y_t)$ denote the k-lag and l-lag historical state vectors of $x$ and $y$ respectively, with the number of states is determined as 4 by quantiles as Eq. \ref{eq02}. Besides, a 600-time Markov Block Bootstrap is adopted to preserve the local dynamics between the series while eliminating the global dependency, the significance of the true $TE$ is obtained from the surrogate distribution of the generated $TE$s, where the smaller the $p$-value, the more significant the information flow.
+  where $\mathbf{x}_t^{(k)} = (x_{t-k+1}, \dots, x_t)$ and $\mathbf{y}_t^{(l)} = (y_{t-l+1}, \dots, y_t)$ denote the k-lag and l-lag historical state vectors of $x$ and $y$ respectively, with the number of states is determined as 4 by quantiles as Eq. \ref{eq02}. Besides, a 600-time Markov Block Bootstrap\cite{TE03} is adopted to preserve the local dynamics between the series while eliminating the global dependency, the significance of the true $TE$ is obtained from the surrogate distribution of the generated $TE$s, where the smaller the $p$-value, the more significant the information flow.
 
 \begin{equation}\label{eq02}
 x^{'}_{t}=\left\{
@@ -215,16 +217,28 @@ Given that VAR models are widely used to capture linear interdependencies, which
 
   In these equations, $S$, $K$, $n$, $h$, and \(\hat{\rho}_k\) denote skewness, kurtosis, length of the residual observed, lag order, and autocorrelation at lag $k$, respectively. The significance of the residuals is assessed via the Jarque-Bera (JB) test for normality and the Ljung-Box (Q) test for autocorrelation. The corresponding $p$-values are computed under the null hypotheses of normality ($\chi^2_2$ distribution) and white noise ($\chi^2_h$ distribution), respectively.
   \item[3.] We then recompute bidirectional TE on the residuals to measure the information flow of the nonlinear components.By comparing TE before and after filtering, we can model the relative strength of linear and nonlinear causality and distinguish their respective roles in market dynamics. 
-
 \end{itemize}
+With all the three 
 \subsection{Mann-Kendall Trend}
-To further evaluate trend inside the TE calculated, we applied the Mann-Kendall (MK) test to the daily TE series, The definition of the MK test contains two parts as Eq. \ref{eq06} and Eq. \ref{eq07}, where the satistics $Z$ itself represent both the direction and the significance of the trend, for $Z$ rising to 1 represent a significant upward trend, and falling to -1 represent a significant downward trend.
-
+To further evaluate trend inside the TE calculated, we applied the Mann-Kendall (MK) test to the daily TE series, The definition of the MK test contains two parts as Eq. \ref{eq06} and Eq. \ref{eq07}, where the satistics $S$ represent both the direction of the trend, with its average on each day-pair denoted as $\tau$, and $p$-value obtained from the location of $Z$ in the normal distribution.
 \begin{equation} \label{eq07}
 S = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \text{sign}(x_j - x_i)
 \end{equation}
 
-\begin{equation} \label{eq08}
+\begin{equation}\label{eq08}
+  \text{where } sign(x) = \left\{
+  \begin{array}{rcl}
+  1 & & {x > 0}\\
+  0 & & {x = 0}\\
+  -1 & & {x < 0} \\
+  \end{array} \right.
+\end{equation}
+
+\begin{equation} \label{eq09}
+  \tau = \frac{2S}{(n(n-1)x_j - x_i)}\text{($n$ represent the length of the series)}
+  \end{equation}
+
+\begin{equation} \label{eq10}
 Z = 
 \begin{cases}
 \frac{S - 1}{\sqrt{\text{Var}(S)}} & \text{if } S > 0 \\
@@ -233,7 +247,7 @@ Z =
 \end{cases}
 \end{equation}
 \section{Results}
-\subsection{Volume-price relationship of high-frequency data}
+\subsection{Volume-price relationship of high-frequency data}\label{sec:te_ori}
 Based on the transfer entropy (TE) calculated for each day, we compute Annual Summaries of TE for both direction, which are offered in Tab. \ref{tab:te_p2v_stats} and Tab. \ref{tab:te_v2p_stats}. hype skewness and kurtosis are observed in 2017, 2021, 2022 and 2025, showing that the price-volume relation tend to get more significant when the market is in drastic volatility. By comparing the $\bar{p}$ of TE betwen the two direction, the one from price to volume is much lower, which means the information flow from price to volume is more significant, indicating the market is generally driven more by price than volume, however, On the TE value it self, We found the average of $TE_{v \rightarrow p}$ is slightly higher than $TE_{p \rightarrow v}$, which indicates that though the information flow from volume to price is less significant, a stable part of non-linear information flow from volume to price is coverd by the the dominant bidirectional linear one.(Details in Sec. \ref{sec:var}).
 % --------- PATCHED TABLE: P -> V -----------
 \begin{table}[H]
@@ -287,7 +301,7 @@ Consequently, we did another comparison over the TE value pairly in a day, with 
   \caption{Ratio of Days that $TE_{p \rightarrow v}$ > $TE_{v \rightarrow p}$ across years.}
   \label{fig:TE_CP_daily}
   \end{figure}
-Besides, we observed specially higher upper quantiles of TE in 2023 and 2024(as shown in Tab. \ref{tab:te_quantiles}), which might be caused by certain market maniputation like The Merge of ETH, and cause the market to form a hyper connection between price and volume.
+Besides, we observed specially higher upper quantiles of TE in 2023 and 2024(as shown in Tab. \ref{tab:te_quantiles}), which might be caused by certain market maniputation like The Merge of ETH, showing a complex and strong connection was formed between price and volume in that period.
 \begin{table}[H]
   \caption{95\% and 99\% Quantiles of TE from Both Directions}
   \label{tab:te_quantiles}
@@ -342,7 +356,7 @@ Moreover, we observe a consistent asymmetry between the Ljung-Box $p$-values of 
   \end{tabular}
 \end{table}
 
-After obtaining the residuals, we recompute the TE on the residuals, It is notable that the $\bar{p}$ of both directions degenerate to the same level, with $\bar{p}$ for $TE_{Pr \rightarrow Vr}$ higher than before(Tab. \ref{tab:te_p2v_stats}) and $\bar{p}$ for $TE_{Vr \rightarrow Pr}$ lower than before(Tab. \ref{tab:te_v2p_stats}), indecating that linear components dominates the information flow from price to volume, while non-linear components dominates the information flow from volume to price. The dynamic remains almost the same on moments of the bidirectional TE, with only few 
+After obtaining the residuals, we recompute the TE on the residuals, It is notable that the $\bar{p}$ of both directions degenerate to nearly the same level, with $\bar{p}$ for $TE_{Pr \rightarrow Vr}$ higher than before(Tab. \ref{tab:te_p2v_stats}) and $\bar{p}$ for $TE_{Vr \rightarrow Pr}$ lower than before(Tab. \ref{tab:te_v2p_stats}), indecating that linear components dominates the information flow from price to volume, while non-linear components dominates the information flow from volume to price. Furthermore, the more significant direction shifted from $TE_{p \rightarrow v}$ to $TE_{vr \rightarrow pr}$ in 2017 \& 2020.Meanwhile, the dynamic remains almost the same on moments of the bidirectional TE, with only slight difference from those in Tab. \ref{tab:te_p2v_stats} and Tab. \ref{tab:te_v2p_stats}, thus we put details in Appendix. 
 \begin{table}[H]
   \caption{Average $p$‑values of $TE$ for Residuals}
   \label{tab:ter_residual_pvalues}
@@ -388,15 +402,25 @@ After obtaining the residuals, we recompute the TE on the residuals, It is notab
 
 
 \subsection{Trend analysis}
-We apply the Mann-Kendall test to the yearly transfer entropy (TE) series to examine directional trends in information flow. The results reveal that TE from price to volume is more likely to show significant changes over time, with a tendency to weaken in recent years, which might be caused by the high value of Bitcoin. In contrast, TE from volume to price, when it shows a trend, is nearly always increasing. This suggests that volume is becoming a stronger leading indicator for price in the cryptocurrency market. Additionally, residual-based TE series uncover asynchronous shifts in information structure, particularly in 2021 and 2022, which may reflect behavioral changes associated with the market's transition from bull to bear conditions.
+With the results from MK test put on all $TE$ series , we further investigate the trend inside the price-volume relationship. we put visual analysis on the direction of accumulative trend(by rolling up the $\tau$ year by year) and the significance of the trend in those $TE$s, and found out that the accumulative trend of infomation flow from volume to price keeps incresing with that from price to volume showing a evident decrease(in Fig. \ref{fig:MK_TAU_annual}). Besides, it is noticable that the trend of information flow from volume to price shares its pattern with that of its non-linear residuals, while that from price to volume shows drastiv volativity and only its residuals shows steady decreasiing trend. Following by our observation in Section \ref{sec:var}, we are more confident with our assumption that the non-linear conponents dominates the information flow from volume to price, and the linear conponents dominates that from price to volume. with the former has shown a strengthening trend over the years, whereas the latter gradually weakens. And for significance analysis, we found that the p-value pattern was almost shared between $v \rightarrow p$, $p \rightarrow v$ and $vr \rightarrow pr$, with only $pr \rightarrow vr$ less significant(in Fig. \ref{fig:MK_P_annual}), indicating that the former 3 information flow are in a general psttern of whole market, while the pattern of $pr \rightarrow vr$ deviates from the general market status. This indecates a 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{imgs/cumulativeTrend.png}
+  \caption{Cumulative Trend of $TE$ across years.}
+  \label{fig:MK_TAU_annual}
+  \end{figure}
 
-
-
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{imgs/trendSignificance.png}
+    \caption{Significance of Trend across years.}
+    \label{fig:MK_P_annual}
+    \end{figure}
 
 
 
 \section{Conclusions}
-
+TODO
 \section*{CRediT authorship contribution statement}
 
 
@@ -435,6 +459,7 @@ The authors declare that they have no known competing financial interests or per
   \end{tabular}
 \end{table}
 
+
 \begin{table}[H]
   \caption{Moments of $TE_{Vr \rightarrow Pr}$ (Residuals)}
   \label{tab:ter_vr2pr_moments_app}
@@ -455,5 +480,92 @@ The authors declare that they have no known competing financial interests or per
     \hline
   \end{tabular}
 \end{table}
+
+% -------------------------- MK tables --------------------------
+\begin{table}[H]
+  \caption{Mann--Kendall Test Results on Transfer Entropy from \textbf{Volume to Price} ($TE_{V \rightarrow P}$)}
+  \label{tab:MK_Vol2ValTE}
+  \centering
+  \begin{tabular}{lrrrrc}
+    \hline
+    Year & $Z$-stat & $p$-value & $S$ & Var$(S)$ & $\tau$ \\
+    \hline
+    2017 & -1.0856131 & 0.27765018 & -427  & 153981.667 & -0.06994267 \\
+    2018 &  0.4572779 & 0.64747130 &  141  &  93733.667 &  0.03225806 \\
+    2019 &  1.0070739 & 0.31389929 &   78  &   5846.000 &  0.11711712 \\
+    2020 & -1.4917860 & 0.13575525 & -1237 & 686473.667 & -0.07428091 \\
+    2021 &  1.9788126 & 0.04783711 &  4497 & 5162300.333 &  0.06998024 \\
+    2022 &  2.1827774 & 0.02905221 &  4059 & 3456250.333 &  0.08259905 \\
+    2023 &  0.3568206 & 0.72122610 &    21 &   3141.667 &  0.04827586 \\
+    2024 & -1.3745703 & 0.16926471 &  -764 &  308116.667 & -0.07852004 \\
+    2025 &  1.6927542 & 0.09050227 &   300 &   31200.000 &  0.14423077 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{Mann--Kendall Test Results on Transfer Entropy from \textbf{Price to Volume} ($TE_{P \rightarrow V}$)}
+  \label{tab:MK_Val2VolTE}
+  \centering
+  \begin{tabular}{lrrrrc}
+    \hline
+    Year & $Z$-stat & $p$-value & $S$ & Var$(S)$ & $\tau$ \\
+    \hline
+    2017 & -2.00812947 & 0.04462954 &  -789 & 153981.667 & -0.129238329 \\
+    2018 &  1.98589269 & 0.04704524 &   609 &  93733.667 &  0.139327385 \\
+    2019 &  1.00707385 & 0.31389929 &    78 &   5846.000 &  0.117117117 \\
+    2020 & -3.55807860 & 0.00037358 & -2949 & 686473.667 & -0.177085210 \\
+    2021 &  4.50866467 & 0.00000652 & 10245 & 5162300.333 &  0.159427958 \\
+    2022 & -2.58619855 & 0.00970410 & -4809 & 3456250.333 & -0.097861256 \\
+    2023 &  0.03568206 & 0.97153590 &     3 &   3141.667 &  0.006896552 \\
+    2024 & -2.36901689 & 0.01783544 & -1316 &  308116.667 & -0.135251799 \\
+    2025 &  1.52291261 & 0.12778060 &   270 &   31200.000 &  0.129807692 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{Mann--Kendall Test Results on Transfer Entropy from \textbf{Volume to Price} (Residuals, $TE_{Vr \rightarrow Pr}$)}
+  \label{tab:MK_Volr2ValrTE}
+  \centering
+  \begin{tabular}{lrrrrc}
+    \hline
+    Year & $Z$-stat & $p$-value & $S$ & Var$(S)$ & $\tau$ \\
+    \hline
+    2017 & -3.68496854 & 0.00022873 & -1447 & 153981.667 & -0.237018837 \\
+    2018 &  0.86882805 & 0.38494119 &   267 &  93733.667 &  0.061084420 \\
+    2019 &  0.71933847 & 0.47193240 &    56 &   5846.000 &  0.084084084 \\
+    2020 & -2.21595397 & 0.02669465 & -1837 & 686473.667 & -0.110310455 \\
+    2021 &  2.68213613 & 0.00731537 &  6095 & 5162300.333 &  0.094847575 \\
+    2022 &  2.82072071 & 0.00479159 &  5245 & 3456250.333 &  0.106733685 \\
+    2023 &  0.03568206 & 0.97153587 &     3 &   3141.667 &  0.006896552 \\
+    2024 & -1.05389725 & 0.29192996 &  -586 &  308116.667 & -0.060226105 \\
+    2025 &  2.15698775 & 0.03100662 &   382 &   31200.000 &  0.183653846 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{Mann--Kendall Test Results on Transfer Entropy from \textbf{Price to Volume} (Residuals, $TE_{Pr \rightarrow Vr}$)}
+  \label{tab:MK_Valr2VolrTE}
+  \centering
+  \begin{tabular}{lrrrrc}
+    \hline
+    Year & $Z$-stat & $p$-value & $S$ & Var$(S)$ & $\tau$ \\
+    \hline
+    2017 & -0.2854194 & 0.7753228 &  -113 & 153981.667 & -0.01850942 \\
+    2018 &  0.9080233 & 0.3638659 &   279 &  93733.667 &  0.06382979 \\
+    2019 &  0.5623919 & 0.5738490 &    44 &   5846.000 &  0.06606607 \\
+    2020 & -4.7264029 & 0.00000229 & -3917 & 686473.667 & -0.23521287 \\
+    2021 &  0.4550917 & 0.6490433 &  1035 & 5162300.333 &  0.01610619 \\
+    2022 & -0.4260127 & 0.6700986 &  -793 & 3456250.333 & -0.01613724 \\
+    2023 &  0.6422771 & 0.5206933 &    37 &   3141.667 &  0.08505747 \\
+    2024 & -2.1240083 & 0.03366945 & -1180 &  308116.667 & -0.12127441 \\
+    2025 & -0.5944454 & 0.5522142 &  -106 &   31200.000 & -0.05096154 \\
+    \hline
+  \end{tabular}
+\end{table}
+% ----------------------- end MK tables --------------------------
+
 
 \end{document}

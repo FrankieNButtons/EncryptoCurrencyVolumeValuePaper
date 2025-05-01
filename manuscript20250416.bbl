@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{5}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -11,6 +11,26 @@
 \providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
 \providecommand{\bibinfo}[2]{#2}
 \ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Aalborg et~al.(2019)Aalborg, Moln{\'a}r \& de~Vries}]{aalborg2019can}
+\bibinfo{author}{Aalborg, H.~A.}, \bibinfo{author}{Moln{\'a}r, P.}, \& \bibinfo{author}{de~Vries, J.~E.} (\bibinfo{year}{2019}).
+\newblock \bibinfo{title}{What can explain the price, volatility and trading volume of bitcoin?}
+\newblock {\it \bibinfo{journal}{Finance Research Letters}\/},  {\it \bibinfo{volume}{29}\/}, \bibinfo{pages}{255--265}.
+%Type = Article
+\bibitem[{Behrendt et~al.(2019)Behrendt, Dimpfl, Peter \& Zimmermann}]{TE03}
+\bibinfo{author}{Behrendt, S.}, \bibinfo{author}{Dimpfl, T.}, \bibinfo{author}{Peter, F.~J.}, \& \bibinfo{author}{Zimmermann, D.~J.} (\bibinfo{year}{2019}).
+\newblock \bibinfo{title}{Rtransferentropy—quantifying information flow between different time series using effective transfer entropy}.
+\newblock {\it \bibinfo{journal}{SoftwareX}\/},  {\it \bibinfo{volume}{10}\/}, \bibinfo{pages}{100265}.
+%Type = Article
+\bibitem[{Dimpfl \& Peter(2013)}]{dimpfl2013using}
+\bibinfo{author}{Dimpfl, T.}, \& \bibinfo{author}{Peter, F.~J.} (\bibinfo{year}{2013}).
+\newblock \bibinfo{title}{Using transfer entropy to measure information flows between financial markets}.
+\newblock {\it \bibinfo{journal}{Studies in Nonlinear Dynamics and Econometrics}\/},  {\it \bibinfo{volume}{17}\/}, \bibinfo{pages}{85--102}.
+%Type = Article
+\bibitem[{Feng et~al.(2018)Feng, Wang \& Zhang}]{feng2018informed}
+\bibinfo{author}{Feng, W.}, \bibinfo{author}{Wang, Y.}, \& \bibinfo{author}{Zhang, Z.} (\bibinfo{year}{2018}).
+\newblock \bibinfo{title}{Informed trading in the bitcoin market}.
+\newblock {\it \bibinfo{journal}{Finance Research Letters}\/},  {\it \bibinfo{volume}{26}\/}, \bibinfo{pages}{63--70}.
 %Type = Article
 \bibitem[{Schreiber(2000)}]{TE01}
 \bibinfo{author}{Schreiber, T.} (\bibinfo{year}{2000}).
